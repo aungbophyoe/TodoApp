@@ -1,0 +1,1 @@
+C:\Users\aungb\AndroidStudioProjects\MyTodo\buildSrc\build\classes\kotlin\main\Config.class;C:\Users\aungb\AndroidStudioProjects\MyTodo\buildSrc\build\classes\kotlin\main\Lib$Version.class;C:\Users\aungb\AndroidStudioProjects\MyTodo\buildSrc\build\classes\kotlin\main\Lib.class;C:\Users\aungb\AndroidStudioProjects\MyTodo\buildSrc\build\classes\kotlin\main\Sdk.class
