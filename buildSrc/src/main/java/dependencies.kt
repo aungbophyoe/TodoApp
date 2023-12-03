@@ -14,11 +14,12 @@ object Config {
     val jvmTarget = "1.8"
     val isMinifyEnabled = false
     var debug_enable = false
+    const val hilt = "com.google.dagger:hilt-android-gradle-plugin:2.48"
 }
 
 object Lib {
     private object Version {
-        const val hilt = "2.44"
+        const val hilt = "2.48"
         const val room = "2.6.1"
         const val lifecycle_version = "2.6.2"
         const val orbit = "4.2.0"

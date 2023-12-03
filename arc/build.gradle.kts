@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
 }
 
@@ -8,11 +8,8 @@ android {
     compileSdk = Sdk.compile
 
     defaultConfig {
-        applicationId = "com.aungbophyoe.arc"
         minSdk = Sdk.min
         targetSdk = Sdk.target
-        versionCode = Sdk.versionCode
-        versionName = Sdk.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
