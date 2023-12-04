@@ -47,8 +47,10 @@ object Lib {
     const val coroutines_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Version.coroutines_version}"
     const val coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutines_version}"
 
-    const val progress = "com.kaopiz:kprogresshud:1.2.0"
+    const val progress = "com.github.harrisonsj:KProgressHUD:1.1"
 
     const val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Version.nav_version}"
     const val navigation_ui = "androidx.navigation:navigation-ui-ktx:${Version.nav_version}"
+    const val adapter_delegate = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl:4.3.0"
+    const val adapter_delegate_viewbinding = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.0"
 }

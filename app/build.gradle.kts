@@ -69,5 +69,12 @@ dependencies {
     implementation(project(mapOf("path" to ":domain")))
     implementation(project(mapOf("path" to ":arc")))
 
+    implementation(Lib.orbit_mvi)
+    implementation(Lib.orbit_mvi_viewModel)
+    implementation(Lib.navigation_fragment)
+    implementation(Lib.navigation_ui)
+    implementation(Lib.adapter_delegate)
+    implementation(Lib.adapter_delegate_viewbinding)
+
 
 }
