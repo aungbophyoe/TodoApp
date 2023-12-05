@@ -51,6 +51,4 @@ object Lib {
 
     const val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Version.nav_version}"
     const val navigation_ui = "androidx.navigation:navigation-ui-ktx:${Version.nav_version}"
-    const val adapter_delegate = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl:4.3.0"
-    const val adapter_delegate_viewbinding = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.0"
 }

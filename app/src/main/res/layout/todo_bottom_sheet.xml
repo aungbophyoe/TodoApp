@@ -35,7 +35,7 @@
 
         <EditText
             android:id="@+id/edtNewTodo"
-            style="@style/TextAppearance.Material3.BodySmall"
+            style="@style/TextAppearance.Material3.BodyMedium"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_margin="16dp"

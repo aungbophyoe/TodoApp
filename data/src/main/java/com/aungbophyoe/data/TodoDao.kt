@@ -23,6 +23,18 @@ interface TodoDao {
     @Delete
     suspend fun deleteTodo(todo: TodoEntity)
 
-    @Query("SELECT * FROM todos WHERE title LIKE :searchQuery")
+    @Query("SELECT * FROM todos WHERE LOWER(title) LIKE LOWER(:searchQuery)")
     fun searchTodos(searchQuery: String): Flow<List<TodoEntity>>
+
+    @Query("SELECT * FROM todos WHERE LOWER(title) LIKE LOWER(:searchQuery) AND isCompleted = 1")
+    fun searchCompletedTodos(searchQuery: String): Flow<List<TodoEntity>>
+
+    @Query("SELECT * FROM todos WHERE LOWER(title) LIKE LOWER(:searchQuery) AND isCompleted = 0")
+    fun searchUncompletedTodos(searchQuery: String): Flow<List<TodoEntity>>
+
+    @Query("SELECT * FROM todos WHERE isCompleted = 1")
+    fun getCompletedTodos(): Flow<List<TodoEntity>>
+
+    @Query("SELECT * FROM todos WHERE isCompleted = 0")
+    fun getUncompletedTodos(): Flow<List<TodoEntity>>
 }

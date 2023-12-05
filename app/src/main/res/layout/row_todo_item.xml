@@ -7,6 +7,8 @@
         <variable
             name="model"
             type="com.aungbophyoe.domain.model.Todo" />
+
+        <import type="android.view.View" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -17,11 +19,21 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingStart="4dp"
             android:paddingTop="8dp"
             android:paddingEnd="4dp"
             android:paddingBottom="8dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@color/color_red"
+                android:visibility="@{!model.completed ? View.INVISIBLE : View.VISIBLE}"
+                app:layout_constraintStart_toStartOf="@id/tvTodo"
+                app:layout_constraintTop_toTopOf="@id/tvTodo"
+                app:layout_constraintBottom_toBottomOf="@id/tvTodo"
+                app:layout_constraintEnd_toEndOf="@id/tvTodo"/>
 
             <CheckBox
                 android:id="@+id/checkbox"
@@ -33,6 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/tvTodo"
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +54,6 @@
                 app:layout_constraintStart_toEndOf="@id/checkbox"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="sample" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

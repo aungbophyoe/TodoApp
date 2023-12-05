@@ -19,8 +19,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:\\android\\todo\\todo-release-key.jks") // Adjust the path
+            storePassword = "todo156641test"
+            keyAlias = "todo-app"
+            keyPassword = "todo156641test"
+        }
+    }
+
     buildTypes {
-        release {
+        getByName("release") {
+            signingConfig = signingConfigs["release"]
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -28,6 +38,16 @@ android {
             )
         }
     }
+
+   /* buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }*/
     compileOptions {
         sourceCompatibility = Config.sourceCompatibility
         targetCompatibility = Config.targetCompatibility
@@ -73,8 +93,6 @@ dependencies {
     implementation(Lib.orbit_mvi_viewModel)
     implementation(Lib.navigation_fragment)
     implementation(Lib.navigation_ui)
-    implementation(Lib.adapter_delegate)
-    implementation(Lib.adapter_delegate_viewbinding)
 
 
 }

@@ -1,14 +1,12 @@
 package com.aungbophyoe.mytodo.ui
 
 import android.graphics.Canvas
-import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -17,25 +15,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.aungbophyoe.arc.ViewBindingMVIFragment
 import com.aungbophyoe.arc.utility.hide
+import com.aungbophyoe.arc.utility.hideSoftKeyboard
 import com.aungbophyoe.arc.utility.setSafeClickListener
 import com.aungbophyoe.arc.utility.show
 import com.aungbophyoe.arc.utility.textChanges
 import com.aungbophyoe.domain.model.Todo
 import com.aungbophyoe.mytodo.R
 import com.aungbophyoe.mytodo.databinding.FragmentTodoMainBinding
-import com.aungbophyoe.mytodo.databinding.RowTodoItemBinding
 import com.aungbophyoe.mytodo.databinding.TodoBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
-import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoViewModel, TodoState, TodoSideEffect>() {
+class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoViewModel, TodoState, TodoSideEffect>(),TodoAdapter.ItemOnClickListener,TodoAdapter.CheckOnClickListener {
     override val layoutRes: Int = R.layout.fragment_todo_main
 
     override val viewModel: TodoViewModel by viewModels()
@@ -44,17 +40,9 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
         BottomSheetDialog(requireContext(),R.style.BottomSheetTheme)
     }
 
-    private val todoDelegate = AsyncListDifferDelegationAdapter(
-        DiffUtils,
-        todoItem (
-            itemOnClick = {
-                showTodoBottomSheet(isUpdate = true,it)
-            },
-            checkOnClick = {
-                viewModel.updateTodo(todo = it)
-            }
-        )
-    )
+    private val todoAdapter by lazy {
+        TodoAdapter(this,this)
+    }
 
     override fun handleSideEffect(sideEffect: TodoSideEffect) {
         viewBinding.apply {
@@ -82,7 +70,11 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
                 is TodoSideEffect.UpdateSuccess -> {
                     progressBar.hide()
                     tvNoResult.hide()
-                    todoDelegate.notifyDataSetChanged()
+                    sideEffect.position.let {
+                        if(it<todoAdapter.itemCount) {
+                            todoAdapter.notifyItemChanged(it)
+                        }
+                    }
                 }
             }
         }
@@ -90,8 +82,9 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
 
     override fun render(state: TodoState) {
         viewBinding.apply {
+            Log.d("render state","${state.type}")
             state.data.let {
-                todoDelegate.items = it
+                todoAdapter.submitList(it)
             }
         }
     }
@@ -99,13 +92,13 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewBinding.apply {
-            ivCreateNote.setSafeClickListener {
+            favCreateTodo.setSafeClickListener {
                 showTodoBottomSheet()
             }
             rvMyTodos.apply {
                 layoutManager = LinearLayoutManager(requireContext(),
                     LinearLayoutManager.VERTICAL,false)
-                adapter = todoDelegate
+                adapter = todoAdapter
                 val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
                 itemTouchHelper.attachToRecyclerView(rvMyTodos)
             }
@@ -119,14 +112,34 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
                     }
                 }
                 .launchIn(lifecycleScope)
+
+            filterRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+               /* when (checkedId) {
+                    R.id.rbAll -> {
+                        viewModel.setFilterState(FilterType.ALL)
+                        viewModel.fetchAllTodos()
+                    }
+
+                    R.id.rbCompleted -> {
+                        viewModel.setFilterState(FilterType.COMPLETED)
+                        viewModel.fetchAllTodos()
+                    }
+
+                    R.id.rbUncompleted -> {
+                        viewModel.setFilterState(FilterType.UNCOMPLETED)
+                        viewModel.fetchAllTodos()
+                    }
+                }*/
+            }
         }
     }
 
-    private fun showTodoBottomSheet(isUpdate : Boolean = false,todo: Todo? = null) {
+    private fun showTodoBottomSheet(isUpdate : Boolean = false,todo: Todo? = null,position: Int? = null) {
         val binding = TodoBottomSheetBinding.inflate(layoutInflater) // Replace with your binding class
         binding.apply {
             if(isUpdate) {
                 tvTitle.text = "Update Todo Task"
+                btnOk.text = "Update"
                 todo?.let {
                     edtNewTodo.setText("${it.title}")
                 }
@@ -146,11 +159,12 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
                 if (isUpdate) {
                     todo?.let {
                         todo.title = text
-                        viewModel.updateTodo(todo)
+                        viewModel.updateTodo(todo,position!!)
                     }
                 } else {
                     viewModel.addTodo(text)
                 }
+                activity?.hideSoftKeyboard()
                 todoBottomSheet.dismiss()
             }
         }
@@ -164,34 +178,6 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
         todoBottomSheet.show()
     }
 
-    private fun todoItem(
-        itemOnClick: (Todo) -> Unit,
-        checkOnClick: (Todo) -> Unit
-    ) = adapterDelegateViewBinding<Todo,Todo, RowTodoItemBinding>(
-        { inflater, root ->
-            DataBindingUtil.inflate(
-                inflater,
-                R.layout.row_todo_item,
-                root,
-                false
-            )
-        }
-    ) {
-        bind {
-            binding.apply {
-                item.let {data ->
-                    model = data
-                    root.setSafeClickListener {
-                        itemOnClick(data)
-                    }
-                    checkbox.setSafeClickListener {
-                        data.isCompleted = checkbox.isChecked
-                        checkOnClick(data)
-                    }
-                }
-            }
-        }
-    }
 
     private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
         0,
@@ -250,7 +236,7 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                val todo = todoDelegate.items.getOrNull(position)
+                val todo = todoAdapter.currentList.getOrNull(position)
                 todo?.let {
                     viewModel.deleteTodo(todo)
                 }
@@ -267,5 +253,13 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
             return oldItem == newItem
         }
 
+    }
+
+    override fun itemOnClick(item: Todo, position: Int) {
+        showTodoBottomSheet(isUpdate = true,item,position)
+    }
+
+    override fun checkOnClick(item: Todo, position: Int) {
+        viewModel.updateTodo(todo = item,position)
     }
 }

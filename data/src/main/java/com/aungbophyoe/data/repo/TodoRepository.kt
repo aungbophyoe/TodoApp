@@ -10,4 +10,9 @@ interface TodoRepository {
     suspend fun getAllTodos() : Flow<List<TodoEntity>>
 
     suspend fun searchTodos(query:String): Flow<List<TodoEntity>>
+    suspend fun searchCompletedTodos(query:String): Flow<List<TodoEntity>>
+    suspend fun searchUnCompletedTodos(query:String): Flow<List<TodoEntity>>
+
+    suspend fun getCompletedTodos() : Flow<List<TodoEntity>>
+    suspend fun getUncompletedTodos() : Flow<List<TodoEntity>>
 }
