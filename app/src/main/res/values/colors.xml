@@ -2,7 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="selector_gray">#BDBDBD</color>
+    <color name="selector_gray">#6F6E6E</color>
     <color name="color_solitude">#EFF3F6</color>
     <color name="common_grey">#A6A6A6</color>
+    <color name="color_red">@android:color/holo_red_dark</color>
 </resources>

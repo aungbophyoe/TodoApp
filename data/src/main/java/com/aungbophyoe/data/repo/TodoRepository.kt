@@ -8,4 +8,6 @@ interface TodoRepository {
     suspend fun update(todo: TodoEntity)
     suspend fun delete(todo: TodoEntity)
     suspend fun getAllTodos() : Flow<List<TodoEntity>>
+
+    suspend fun searchTodos(query:String): Flow<List<TodoEntity>>
 }

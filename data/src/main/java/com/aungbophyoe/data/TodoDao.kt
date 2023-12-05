@@ -22,4 +22,7 @@ interface TodoDao {
 
     @Delete
     suspend fun deleteTodo(todo: TodoEntity)
+
+    @Query("SELECT * FROM todos WHERE title LIKE :searchQuery")
+    fun searchTodos(searchQuery: String): Flow<List<TodoEntity>>
 }

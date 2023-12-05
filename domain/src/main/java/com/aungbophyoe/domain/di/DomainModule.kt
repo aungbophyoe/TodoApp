@@ -19,7 +19,7 @@ object DomainModule {
     }
 
     @Provides
-    fun provideTodoUseCase(repository: TodoRepository,mapper: TodoMapper) : TodoUseCase {
+    fun provideTodoUseCase(repository: TodoRepositoryImpl,mapper: TodoMapper) : TodoUseCase {
         return TodoUseCase(repository, mapper)
     }
 }

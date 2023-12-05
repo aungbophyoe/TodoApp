@@ -22,4 +22,8 @@ class TodoRepositoryImpl @Inject constructor(private val todoDao : TodoDao) : To
     override suspend fun getAllTodos(): Flow<List<TodoEntity>> {
         return todoDao.getAllTodos()
     }
+
+    override suspend fun searchTodos(query: String): Flow<List<TodoEntity>> {
+        return todoDao.searchTodos(query)
+    }
 }

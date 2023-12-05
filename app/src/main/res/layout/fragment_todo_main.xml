@@ -80,6 +80,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvNoResult"
             android:visibility="gone"
+            android:textAlignment="center"
             style="@style/TextAppearance.Material3.TitleMedium"
             android:text="@string/no_result"
             app:layout_constraintStart_toStartOf="parent"

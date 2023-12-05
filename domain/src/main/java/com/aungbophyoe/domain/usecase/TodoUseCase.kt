@@ -28,4 +28,13 @@ class TodoUseCase @Inject constructor(private val repository: TodoRepository,pri
         }
         return data
     }
+
+    suspend fun searchTodos(query : String) : Flow<List<Todo>> {
+        val data = repository.searchTodos(query = query).map { entites ->
+            entites.map {
+                mapper.mapFromEntity(it)
+            }
+        }
+        return data
+    }
 }
