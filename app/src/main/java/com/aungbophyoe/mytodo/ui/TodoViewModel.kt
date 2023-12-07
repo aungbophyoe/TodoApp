@@ -73,6 +73,13 @@ class TodoViewModel  @Inject constructor(private val todoUseCase: TodoUseCase) :
                 title = text,
                 date = getCurrentDateTime()
             )
+            val copyData = state.data
+            copyData.forEach {
+                if(it.title.lowercase() == text){
+                    postSideEffect(TodoSideEffect.ShowError("Duplicate Data."))
+                    return@intent
+                }
+            }
             todoUseCase.insert(data)
             postSideEffect(TodoSideEffect.Success)
         } catch (e : Exception) {
@@ -80,11 +87,16 @@ class TodoViewModel  @Inject constructor(private val todoUseCase: TodoUseCase) :
         }
     }
 
-    fun updateTodo(todo: Todo,position : Int) = intent {
+    fun updateTodo(todo: Todo,position : Int,isCheck : Boolean = false) = intent {
         postSideEffect(TodoSideEffect.Loading)
         try {
             todo.let {
                 it.date = getCurrentDateTime()
+                it.isUpdated = true
+                Log.d("todo update","$isCheck , ${it.isUpdated}")
+                /*if(isCheck.not() && it.isUpdated.not()) {
+                    it.isUpdated = true
+                }*/
             }
             todoUseCase.update(todo)
             postSideEffect(TodoSideEffect.UpdateSuccess(position))

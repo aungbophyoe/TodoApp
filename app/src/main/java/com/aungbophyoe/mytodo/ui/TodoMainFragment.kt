@@ -260,6 +260,6 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
     }
 
     override fun checkOnClick(item: Todo, position: Int) {
-        viewModel.updateTodo(todo = item,position)
+        viewModel.updateTodo(todo = item,position,isCheck = true)
     }
 }

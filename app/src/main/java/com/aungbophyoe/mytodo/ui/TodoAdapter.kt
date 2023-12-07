@@ -19,7 +19,9 @@ class TodoAdapter constructor(private val itemOnClickListener: ItemOnClickListen
         fun bind(item: Todo) {
             binding.apply {
                 model = item
-                root.setSafeClickListener {
+                mcvTodo.isEnabled = item.isCompleted.not()
+                checkbox.isEnabled = item.isCompleted.not()
+                mcvTodo.setSafeClickListener {
                     itemOnClickListener.itemOnClick(item,adapterPosition)
                 }
                 checkbox.setSafeClickListener {

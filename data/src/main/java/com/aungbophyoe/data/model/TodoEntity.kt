@@ -9,5 +9,6 @@ data class TodoEntity(
     val id: Long = 0,
     val title: String,
     val isCompleted: Boolean = false,
-    val date: String // Format: dd-MM-yyyy HH:mm:ss
+    val date: String, // Format: dd-MM-yyyy HH:mm:ss
+    val isUpdated : Boolean = false
 )
