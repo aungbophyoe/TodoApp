@@ -131,8 +131,61 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
                     }
                 }*/
             }
+
+            val nums = intArrayOf(1,1,0,1,1,1)
+            val result = findMaxSequenceNumber(nums)
+            Log.d("result test 1","$result")
+
+            val numsTwo = intArrayOf(1,0,1,1,0,1)
+            val resultTwo = findMaxSequenceNumber(numsTwo)
+            Log.d("result test 2","$resultTwo")
+
+            val numTest1 = intArrayOf(2,7,11,15)
+            val targetTest1 = 9
+            val resultTest1 = addTwoSum(numTest1,targetTest1)
+            Log.d("result numTest1","${resultTest1.contentToString()}")
+
+            val numTest2 = intArrayOf(3,2,4)
+            val targetTest2 = 6
+            val resultTest2 = addTwoSum(numTest2,targetTest2)
+            Log.d("result numTest2","${resultTest2.contentToString()}")
+
+            val numTest3 = intArrayOf(3,3)
+            val targetTest3 = 6
+            val resultTest3 = addTwoSum(numTest3,targetTest3)
+            Log.d("result numTest3","${resultTest3.contentToString()}")
+//0,1
+
         }
     }
+
+    private fun addTwoSum(nums: IntArray,target : Int) : IntArray {
+        val numIndicesMap = mutableMapOf<Int,Int>()
+        for(i in nums.indices){
+            val dd = target - nums[i]
+            if(numIndicesMap.containsKey(dd)) {
+                return intArrayOf(numIndicesMap[dd]!!,i)
+            }
+            numIndicesMap[nums[i]] = i
+        }
+        return intArrayOf(-1,-1)
+    }
+
+    private fun findMaxSequenceNumber(nums : IntArray) : Int {
+        var result = 0
+        var current = 0
+        for (num in nums) {
+            if(num == 1){
+                current++
+                result = maxOf(result,current)
+            } else {
+                current = 0
+            }
+        }
+        return result
+    }
+
+
 
     private fun showTodoBottomSheet(isUpdate : Boolean = false,todo: Todo? = null,position: Int? = null) {
         val binding = TodoBottomSheetBinding.inflate(layoutInflater) // Replace with your binding class
