@@ -132,7 +132,7 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
                 }*/
             }
 
-            val nums = intArrayOf(1,1,0,1,1,1)
+           /* val nums = intArrayOf(1,1,0,1,1,1)
             val result = findMaxSequenceNumber(nums)
             Log.d("result test 1","$result")
 
@@ -153,10 +153,98 @@ class TodoMainFragment : ViewBindingMVIFragment<FragmentTodoMainBinding, TodoVie
             val numTest3 = intArrayOf(3,3)
             val targetTest3 = 6
             val resultTest3 = addTwoSum(numTest3,targetTest3)
-            Log.d("result numTest3","${resultTest3.contentToString()}")
+            Log.d("result numTest3","${resultTest3.contentToString()}")*/
 //0,1
 
+
+            // code test
+
+            /*val input1 = "Apple"
+            val input2 = "VTech"
+            val input3 = "Flipping Case"
+            val input4 = "Year 2023"
+
+            val result1 = changeCharacter(input1)
+            Log.d("result 1", "$result1")
+            val result2 = changeCharacter(input2)
+            Log.d("result 2", "$result2")
+            val result3 = changeCharacter(input3)
+            Log.d("result 3", "$result3")
+            val result4 = changeCharacter(input4)
+            Log.d("result 4", "$result4")*/
+
+          /*  Test#1
+            Input: “Apple”
+            Output: “aPPLE”
+            Test#2
+            Input: “VTech”
+            Output: “vtECH”
+
+            Test#3
+            Input: “Flipping Case”
+            Output: “fLIPPING cASE”
+
+            Test#4
+            Input: “Year 2023”
+            Output: “yEAR 2023”*/
+
+
+            /*
+            *
+            * Test #1
+Input: s = "anagram", t = "nagaram"
+Output: true
+
+Test#2
+Input: s = "anagrama", t = "nagaram"
+Output: false
+
+Test #3
+Input: s = "rat", t = "car"
+Output: false*/
+
+            val test1 = isAnagram(s = "anagram",t = "nagaram")
+            Log.d("Test 1","$test1")
+            val test2 = isAnagram(s = "anagrama",t = "nagaram")
+            Log.d("Test 2","$test2")
+            val test3 = isAnagram(s = "rat",t = "car")
+            Log.d("Test 3","$test3")
+
+
+
         }
+    }
+
+    private fun isAnagram(s:String,t:String) : Boolean {
+        if(s.length != t.length) {
+            return false
+        }
+        val charCount = mutableMapOf<Char,Int>()
+        //Input: s = "anagram", t = "nagaram"
+        // a - 1
+
+        for (ch in s) {
+            charCount[ch] = charCount.getOrDefault(ch,0) + 1
+        }
+        for (ch in t) {
+            val count = charCount.getOrDefault(ch,0)
+            if(count == 0) {
+                return false
+            }
+            charCount[ch] = count - 1
+        }
+        return true
+    }
+
+
+    private fun changeCharacter(input : String) : String {
+       return input.map {
+            when {
+                it.isUpperCase() -> it.lowercase()
+                it.isLowerCase() -> it.uppercase()
+                else -> it
+            }
+        }.joinToString("")
     }
 
     private fun addTwoSum(nums: IntArray,target : Int) : IntArray {
